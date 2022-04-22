@@ -1,5 +1,5 @@
 export default {
     '/': 'App',
     '/loginphone': 'pages/LoginPhone',
-    '/loginpws': 'pages/LoginPws'
+    '/loginpws': 'pages/LoginPsw'
 }
