@@ -67,7 +67,7 @@
 
 <script>
 import thirdLogin from "../components/ThirdLogin.vue";
-
+import axios from 'axios';
 export default {
   name: "LoginPws",
   components: {
@@ -113,15 +113,18 @@ export default {
       this.loginData.smsCodeIsEditing = false;
     },
     loginAction() {
-      let msg =
-        "你输入的账号: " +
-        this.loginData.phone +
-        " 密码: " +
-        this.loginData.smsCode;
-      alert(msg);
+      let params = {
+        name: "",
+        password: this.loginData.smsCode,
+        phone: this.loginData.phone,
+        loginNo: this.loginData.phone
+      }
+      axios.post("https://o2osit.dejiplaza.com/dj-open-api/authentication/password", params).then(res => {
+        console.log(res);
+      });
     },
     pswLogin() {
-      alert("密码登录");
+      window.history.go(-1); // 返回上一页 不刷新
     },
   },
 };

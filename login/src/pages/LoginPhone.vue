@@ -131,7 +131,8 @@ export default {
       alert(msg);
     },
     pswLogin() {
-      alert("密码登录");
+      console.log("密码登录");
+      window.location.href = "./loginpsw";
     },
   },
 };
@@ -169,9 +170,9 @@ export default {
 .inputTextField {
   border: 0;
   margin-left: 10px;
-  margin-right: 20px;
+  right: 20px;
   height: 40px;
-  width: 50%;
+  width: 60%;
   font-size: 16px;
 }
 .inputTextField::placeholder {

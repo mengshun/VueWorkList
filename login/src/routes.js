@@ -1,5 +1,6 @@
 export default {
     '/': 'App',
     '/loginphone': 'pages/LoginPhone',
-    '/loginpws': 'pages/LoginPsw'
+    '/loginpsw': 'pages/LoginPsw',
+    '/home': 'pages/Home',
 }
