@@ -17,7 +17,7 @@
       </div>
       <div
         class="line"
-        :class="loginData.phoneIsEditing ? 'selectLine' : null"
+        :class="{selectLine: loginData.phoneIsEditing}"
       ></div>
       <div class="inputSubContainer">
         <img class="inputicon" src="../assets/icon_sms_code.png" />
@@ -30,12 +30,12 @@
           @blur="smsCodeEnded"
         />
         <button @click="showPswAction" class="fetchCode">
-          {{ showPsw ? "隐藏密码" : "显示密码"}}
+          {{ showPsw ? "隐藏密码" : "显示密码" }}
         </button>
       </div>
       <div
         class="line"
-        :class="loginData.smsCodeIsEditing ? 'selectLine' : null"
+        :class="{selectLine: loginData.smsCodeIsEditing}"
       ></div>
     </div>
     <!-- 登录按钮 -->
@@ -61,13 +61,14 @@
       </button>
     </div>
     <!-- 底部协议和 第三方登录 -->
-    <thirdLogin class="third" hideProtocol=true></thirdLogin>
+    <thirdLogin class="third" hideProtocol="true"></thirdLogin>
   </div>
 </template>
 
 <script>
 import thirdLogin from "../components/ThirdLogin.vue";
-import axios from 'axios';
+import axios from "axios";
+import { encryptDes } from "../encryptTool.js";
 export default {
   name: "LoginPws",
   components: {
@@ -76,12 +77,12 @@ export default {
   data() {
     return {
       loginData: {
-        phone: "",
-        smsCode: "",
+        phone: "13605162851",
+        smsCode: "123456",
         phoneIsEditing: false,
         smsCodeIsEditing: false,
       },
-      showPsw: false // 是否显式 密码
+      showPsw: false, // 是否显式 密码
     };
   },
   computed: {
@@ -93,7 +94,7 @@ export default {
     },
     showPswType() {
       return this.showPsw ? "text" : "password";
-    }
+    },
   },
   methods: {
     showPswAction() {
@@ -114,14 +115,44 @@ export default {
     },
     loginAction() {
       let params = {
-        name: "",
-        password: this.loginData.smsCode,
+        captcha: "",
         phone: this.loginData.phone,
-        loginNo: this.loginData.phone
-      }
-      axios.post("https://o2osit.dejiplaza.com/dj-open-api/authentication/password", params).then(res => {
-        console.log(res);
-      });
+        loginNo: this.loginData.phone,
+        password: encryptDes(this.loginData.smsCode, "MOBCB123"),
+        // password: "09cfa31cda5ab3c6",
+        nameType: "crmcardcode",
+        loginType: "crmcard",
+        usermark: "DEJI9541VDKWPWIY1U4",
+        isFromH5Login: 1,
+        loginChacnel: "mportal_web",
+        mallId: 11,
+        tm: 1650780285,
+        clientType: "liteApp",
+        appVersion: "1.0",
+        appUid: 0,
+        osVersion: "IOS",
+        source: "portal_web",
+        appkey: "498CZZDC",
+        deviceId: "JUBNTPJRFLOIA63",
+      };
+      axios
+        .post(
+          "https://o2osit.dejiplaza.com/dj-open-api/authentication/password",
+          params
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code == 200) {
+            this.$router.push({
+              path: "/home",
+            });
+          } else {
+            alert(res.data.msg);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     pswLogin() {
       window.history.go(-1); // 返回上一页 不刷新
@@ -172,7 +203,7 @@ export default {
   font-size: 14px;
 }
 .inputTextField:focus {
-    outline-style: none;
+  outline-style: none;
 }
 .line {
   background-color: lightgray;

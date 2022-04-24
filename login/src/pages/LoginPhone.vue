@@ -17,7 +17,7 @@
       </div>
       <div
         class="line"
-        :class="loginData.phoneIsEditing ? 'selectLine' : null"
+        :class="{selectLine: loginData.phoneIsEditing}"
       ></div>
       <div class="inputSubContainer">
         <img class="inputicon" src="../assets/icon_sms_code.png" />
@@ -35,7 +35,7 @@
       </div>
       <div
         class="line"
-        :class="loginData.smsCodeIsEditing ? 'selectLine' : null"
+        :class="{selectLine: loginData.smsCodeIsEditing}"
       ></div>
     </div>
     <!-- 登录按钮 -->
@@ -43,8 +43,8 @@
     <button
       class="loginButton"
       @click="loginAction"
-      :disabled="!isLoginButtonEnable"
-      :class="isLoginButtonEnable ? 'loginButtonEnable' : 'loginButtonDis'"
+      :disabled="!isActive"
+      :class="{loginButtonActiveColor: isActive}"
     >
       登录
     </button>
@@ -86,7 +86,7 @@ export default {
   },
   computed: {
     // 登录按钮是否可用
-    isLoginButtonEnable() {
+    isActive() {
       return (
         this.loginData.phone.length > 0 && this.loginData.smsCode.length > 0
       );
@@ -199,11 +199,9 @@ export default {
   width: 100%;
   font-size: 16px;
   font-weight: bold;
-}
-.loginButtonDis {
   background-color: lightgray;
 }
-.loginButtonEnable {
+.loginButtonActiveColor {
   background-color: black;
 }
 .fetchCode {
